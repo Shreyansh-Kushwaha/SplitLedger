@@ -13,6 +13,7 @@ export { default as Header } from './Layout/Header.jsx';
 export { default as TransactionForm } from './Transactions/TransactionForm.jsx';
 export { default as TransactionItem } from './Transactions/TransactionItem.jsx';
 export { default as TransactionList } from './Transactions/TransactionList.jsx';
+export { default as UserTransactionHistoryTable } from './Transactions/UserTransactionHistoryTable.jsx';
 
 // User Components
 export { default as UserSearch } from './User/UserSearch.jsx';

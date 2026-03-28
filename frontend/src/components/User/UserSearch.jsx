@@ -53,7 +53,7 @@ const UserSearch = ({ onUserSelect, selectedUserId }) => {
               <p className="text-xs text-slate-600 dark:text-slate-400">{user.email}</p>
             </div>
             <button
-              onClick={() => onUserSelect(user._id)}
+              onClick={() => onUserSelect(user)}
               className={`px-2 py-1 rounded text-xs transition-colors ${
                 selectedUserId === user._id
                   ? 'bg-green-600 text-white'

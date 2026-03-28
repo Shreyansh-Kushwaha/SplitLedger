@@ -11,6 +11,7 @@ import {
   UserSearch,
   TransactionForm,
   TransactionList,
+  UserTransactionHistoryTable,
 } from './components';
 
 // Hooks
@@ -22,6 +23,7 @@ import { authService } from './services';
 function App() {
   const [isLogin, setIsLogin] = useState(true);
   const [selectedUserId, setSelectedUserId] = useState('');
+  const [selectedUserName, setSelectedUserName] = useState('');
   const [darkMode, setDarkMode] = useState(false);
 
   // Initialize dark mode on mount
@@ -65,14 +67,16 @@ function App() {
   const handleLogout = () => {
     logout();
     setSelectedUserId('');
+    setSelectedUserName('');
   };
 
   const handleToggleDarkMode = () => {
     setDarkMode((prev) => !prev);
   };
 
-  const handleUserSelect = (userId) => {
-    setSelectedUserId(userId);
+  const handleUserSelect = (user) => {
+    setSelectedUserId(user._id);
+    setSelectedUserName(user.name);
   };
 
   const handleTransactionSubmit = async (transactionData) => {
@@ -103,8 +107,18 @@ function App() {
       status: tx.status,
       mine,
       settleDisabled: tx.status === 'settled',
+      fromUserId: tx.fromUser?._id,
+      toUserId: tx.toUser?._id,
     };
   }), [transactionsData.transactions, user]);
+
+  const selectedUserTransactions = useMemo(() => {
+    if (!selectedUserId) return [];
+
+    return transactionRows.filter((tx) =>
+      tx.fromUserId === selectedUserId || tx.toUserId === selectedUserId
+    );
+  }, [selectedUserId, transactionRows]);
 
   if (!loggedIn) {
     return (
@@ -180,6 +194,11 @@ function App() {
             selectedUserId={selectedUserId}
           />
         </section>
+
+        <UserTransactionHistoryTable
+          selectedUserName={selectedUserName}
+          transactions={selectedUserTransactions}
+        />
 
         <TransactionList
           transactions={transactionRows}
