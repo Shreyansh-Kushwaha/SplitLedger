@@ -17,3 +17,7 @@ export { default as UserTransactionHistoryTable } from './Transactions/UserTrans
 
 // User Components
 export { default as UserSearch } from './User/UserSearch.jsx';
+
+// Settlement Components
+export { default as SettlementRequests } from './SettlementRequests.jsx';
+export { default as SettlementForm } from './SettlementForm.jsx';

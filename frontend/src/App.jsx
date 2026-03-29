@@ -12,10 +12,12 @@ import {
   TransactionForm,
   TransactionList,
   UserTransactionHistoryTable,
+  SettlementRequests,
+  SettlementForm,
 } from './components';
 
 // Hooks
-import { useAuth, useTransactions } from './hooks';
+import { useAuth, useTransactions, useSettlementRequests } from './hooks';
 
 // Services
 import { authService } from './services';
@@ -25,6 +27,7 @@ function App() {
   const [selectedUserId, setSelectedUserId] = useState('');
   const [selectedUserName, setSelectedUserName] = useState('');
   const [darkMode, setDarkMode] = useState(false);
+  const [settlementPerson, setSettlementPerson] = useState(null);
 
   // Initialize dark mode on mount
   useEffect(() => {
@@ -43,6 +46,15 @@ function App() {
     createTransaction,
     settleTransaction,
   } = useTransactions();
+  const {
+    requests,
+    loading: reqLoading,
+    error: reqError,
+    fetchRequests,
+    createRequest,
+    confirmRequest,
+    rejectRequest,
+  } = useSettlementRequests();
 
   const loggedIn = authService.isAuthenticated();
 
@@ -86,6 +98,39 @@ function App() {
 
   const handleSettleTransaction = async (id) => {
     await settleTransaction(id);
+  };
+
+  const handleSettleClick = (person) => {
+    setSettlementPerson(person);
+  };
+
+  const handleSettlementSubmit = async (data) => {
+    await createRequest(data);
+    setSettlementPerson(null);
+    await fetchTransactions(); // Refresh net amounts
+  };
+
+  const handleSettlementCancel = () => {
+    setSettlementPerson(null);
+  };
+
+  const handleConfirmRequest = async (id) => {
+    try {
+      await confirmRequest(id);
+    } catch (err) {
+      console.error('Confirm request failed:', err);
+    }
+    await fetchRequests(); // Always refresh requests
+    await fetchTransactions(); // Refresh after confirmation
+  };
+
+  const handleRejectRequest = async (id) => {
+    try {
+      await rejectRequest(id);
+    } catch (err) {
+      console.error('Reject request failed:', err);
+    }
+    await fetchRequests(); // Always refresh requests
   };
 
   // Transform transactions for display
@@ -179,7 +224,7 @@ function App() {
             totalLent={transactionsData.totalLent}
             totalBorrowed={transactionsData.totalBorrowed}
           />
-          <NetEffectiveCard netAmounts={netAmounts} />
+          <NetEffectiveCard netAmounts={netAmounts} onSettleClick={handleSettleClick} />
         </section>
 
         <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -206,6 +251,25 @@ function App() {
           onRefresh={fetchTransactions}
           loading={txnLoading}
         />
+
+        <SettlementRequests
+          requests={requests}
+          currentUserEmail={user?.email}
+          onConfirm={handleConfirmRequest}
+          onReject={handleRejectRequest}
+          onRefresh={fetchRequests}
+          loading={reqLoading}
+        />
+
+        {settlementPerson && (
+          <SettlementForm
+            person={settlementPerson}
+            onSubmit={handleSettlementSubmit}
+            onCancel={handleSettlementCancel}
+            loading={reqLoading}
+            error={reqError}
+          />
+        )}
       </div>
     </div>
   );

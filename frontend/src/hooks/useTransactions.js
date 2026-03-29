@@ -56,7 +56,14 @@ export const useTransactions = () => {
       const otherEmail = other?.email || 'unknown';
 
       if (!nets[otherEmail]) {
-        nets[otherEmail] = { name: other?.name || 'Unknown', lent: 0, borrowed: 0, net: 0 };
+        nets[otherEmail] = { 
+          name: other?.name || 'Unknown', 
+          email: otherEmail, 
+          userId: other?._id || '', 
+          lent: 0, 
+          borrowed: 0, 
+          net: 0 
+        };
       }
 
       if (mine) {

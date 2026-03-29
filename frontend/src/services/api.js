@@ -31,3 +31,10 @@ export const transactionAPI = {
   getAll: (token) => apiFetch('/api/transactions', 'GET', null, token),
   settle: (id, token) => apiFetch(`/api/transactions/${id}/settle`, 'PATCH', null, token),
 };
+
+export const settlementRequestAPI = {
+  create: (data, token) => apiFetch('/api/settlement-requests', 'POST', data, token),
+  getAll: (token) => apiFetch('/api/settlement-requests', 'GET', null, token),
+  confirm: (id, token) => apiFetch(`/api/settlement-requests/${id}/confirm`, 'PATCH', null, token),
+  reject: (id, token) => apiFetch(`/api/settlement-requests/${id}/reject`, 'PATCH', null, token),
+};

@@ -6,16 +6,10 @@ const connectDB = require('./config/db');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
 const txnRoutes = require('./routes/transactions');
-const settlementRoutes = require('./routes/settlementRequests');
 
 const app = express();
 
-app.use(cors({
-  origin: 'https://split-ledger-xi.vercel.app', // Your exact React frontend URL
-  credentials: true, // This allows your frontend to send auth tokens/cookies
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'] // Explicitly allow these methods
-}));
-
+app.use(cors());
 app.use(express.json());
 
 connectDB();
@@ -23,7 +17,6 @@ connectDB();
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/transactions', txnRoutes);
-app.use('/api/settlement-requests', settlementRoutes);
 
 app.get('/api/health', (req, res) => res.send({ status: 'ok', service: 'SplitLedger API' }));
 
