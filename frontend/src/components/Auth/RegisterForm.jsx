@@ -8,9 +8,7 @@ const RegisterForm = ({ onRegister, onSwitchToLogin, loading, error }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!name || !email || !password) {
-      return;
-    }
+    if (!name || !email || !password) return;
     try {
       await onRegister({ name, email, password });
     } catch (err) {
@@ -19,24 +17,29 @@ const RegisterForm = ({ onRegister, onSwitchToLogin, loading, error }) => {
   };
 
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md dark:shadow-lg border border-slate-200 dark:border-slate-700">
-      <h2 className="text-xl font-semibold mb-4 text-slate-900 dark:text-white">Register</h2>
-      {error && <p className="text-sm text-rose-600 dark:text-rose-400 mb-3">{error}</p>}
+    <div className="bg-(--app-surface) rounded-2xl p-7 shadow-lg border border-(--app-border)">
+      <h2 className="text-2xl font-bold mb-1 text-(--app-text)">Create account</h2>
+      <p className="text-sm text-(--app-text-3) mb-5">Start tracking your expenses</p>
+      {error && (
+        <p className="text-sm text-rose-600 mb-3 bg-rose-50 dark:bg-rose-900/20 px-3 py-2 rounded-lg">
+          {error}
+        </p>
+      )}
 
       <form onSubmit={handleSubmit} className="space-y-3">
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="Name"
-          className="w-full border rounded px-3 py-2 bg-white dark:bg-slate-700 border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500"
+          placeholder="Full name"
+          className="w-full border border-(--app-border-2) rounded-lg px-3.5 py-2.5 bg-(--app-surface-2) text-(--app-text) placeholder:text-(--app-text-3) focus:outline-none focus:ring-2 focus:ring-(--app-ring) focus:border-transparent"
           required
         />
         <input
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
+          placeholder="Email address"
           type="email"
-          className="w-full border rounded px-3 py-2 bg-white dark:bg-slate-700 border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500"
+          className="w-full border border-(--app-border-2) rounded-lg px-3.5 py-2.5 bg-(--app-surface-2) text-(--app-text) placeholder:text-(--app-text-3) focus:outline-none focus:ring-2 focus:ring-(--app-ring) focus:border-transparent"
           required
         />
         <input
@@ -44,25 +47,25 @@ const RegisterForm = ({ onRegister, onSwitchToLogin, loading, error }) => {
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
           type="password"
-          className="w-full border rounded px-3 py-2 bg-white dark:bg-slate-700 border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500"
+          className="w-full border border-(--app-border-2) rounded-lg px-3.5 py-2.5 bg-(--app-surface-2) text-(--app-text) placeholder:text-(--app-text-3) focus:outline-none focus:ring-2 focus:ring-(--app-ring) focus:border-transparent"
           required
         />
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition-colors disabled:opacity-50"
+          className="w-full bg-(--app-accent) text-white py-2.5 rounded-lg font-medium hover:bg-(--app-accent-hover) transition-colors disabled:opacity-50 mt-1"
         >
-          {loading ? 'Creating account...' : 'Register'}
+          {loading ? 'Creating account...' : 'Create account'}
         </button>
       </form>
 
-      <button
-        onClick={onSwitchToLogin}
-        className="mt-3 text-sm text-indigo-500 hover:underline"
-      >
-        Already have account? Login
-      </button>
+      <p className="mt-4 text-sm text-(--app-text-3) text-center">
+        Already have an account?{' '}
+        <button onClick={onSwitchToLogin} className="text-(--app-accent) font-medium hover:underline">
+          Sign in
+        </button>
+      </p>
     </div>
   );
 };

@@ -9,29 +9,15 @@ const TransactionForm = ({ onSubmit, loading, error, selectedUserId }) => {
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const [type, setType] = useState(TRANSACTION_TYPES.LENT);
 
-  // Update toUserId when selectedUserId changes
   useEffect(() => {
-    if (selectedUserId) {
-      setToUserId(selectedUserId);
-    }
+    if (selectedUserId) setToUserId(selectedUserId);
   }, [selectedUserId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!toUserId || !amount || !date || !type) {
-      return;
-    }
-
+    if (!toUserId || !amount || !date || !type) return;
     try {
-      await onSubmit({
-        toUserId,
-        amount: Number(amount),
-        description,
-        date,
-        type,
-      });
-
-      // Reset form
+      await onSubmit({ toUserId, amount: Number(amount), description, date, type });
       setToUserId('');
       setAmount('');
       setDescription('');
@@ -40,56 +26,56 @@ const TransactionForm = ({ onSubmit, loading, error, selectedUserId }) => {
     }
   };
 
+  const inputClass = "w-full border border-(--app-border-2) rounded-lg px-3 py-2 bg-(--app-surface-2) text-(--app-text) placeholder:text-(--app-text-3) focus:outline-none focus:ring-2 focus:ring-(--app-ring)";
+  const labelClass = "block text-sm mb-1 text-(--app-text-2)";
+
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-xl p-4 shadow-md dark:shadow-lg border border-slate-200 dark:border-slate-700">
-      <h2 className="font-semibold text-lg mb-3 text-slate-900 dark:text-white">Add Transaction</h2>
-      {error && <p className="text-sm text-rose-600 dark:text-rose-400 mb-3">{error}</p>}
+    <div className="bg-(--app-surface) rounded-xl p-4 shadow-sm border border-(--app-border)">
+      <h2 className="font-semibold text-lg mb-3 text-(--app-text)">Add Transaction</h2>
+      {error && <p className="text-sm text-rose-600 mb-3">{error}</p>}
 
       <form onSubmit={handleSubmit} className="grid gap-3 md:grid-cols-2">
         <div>
-          <label className="block text-sm mb-1 text-slate-900 dark:text-white">With</label>
+          <label className={labelClass}>With (User ID)</label>
           <input
             value={toUserId}
             onChange={(e) => setToUserId(e.target.value)}
-            placeholder="User ID"
-            className="w-full border rounded px-3 py-2 bg-white dark:bg-slate-700 border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500"
+            placeholder="User ID from search"
+            className={inputClass}
             required
           />
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            Paste user ID from search results
-          </p>
         </div>
 
         <div>
-          <label className="block text-sm mb-1 text-slate-900 dark:text-white">Amount (₹)</label>
+          <label className={labelClass}>Amount (₹)</label>
           <input
             type="number"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
             min="0"
             step="0.01"
-            className="w-full border rounded px-3 py-2 bg-white dark:bg-slate-700 border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white"
+            className={inputClass}
             required
           />
         </div>
 
         <div>
-          <label className="block text-sm mb-1 text-slate-900 dark:text-white">Date</label>
+          <label className={labelClass}>Date</label>
           <input
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="w-full border rounded px-3 py-2 bg-white dark:bg-slate-700 border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white"
+            className={inputClass}
             required
           />
         </div>
 
         <div>
-          <label className="block text-sm mb-1 text-slate-900 dark:text-white">Type</label>
+          <label className={labelClass}>Type</label>
           <select
             value={type}
             onChange={(e) => setType(e.target.value)}
-            className="w-full border rounded px-3 py-2 bg-white dark:bg-slate-700 border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white"
+            className={inputClass}
             required
           >
             <option value={TRANSACTION_TYPES.LENT}>Lent</option>
@@ -98,20 +84,20 @@ const TransactionForm = ({ onSubmit, loading, error, selectedUserId }) => {
         </div>
 
         <div className="md:col-span-2">
-          <label className="block text-sm mb-1 text-slate-900 dark:text-white">Description</label>
+          <label className={labelClass}>Description</label>
           <input
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Milk, dinner, cab..."
-            className="w-full border rounded px-3 py-2 bg-white dark:bg-slate-700 border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500"
+            className={inputClass}
           />
         </div>
 
-        <div className="md:col-span-2 flex justify-end">
+        <div className="md:col-span-2">
           <button
             type="submit"
             disabled={loading}
-            className="px-4 py-2 bg-emerald-600 text-white rounded hover:bg-emerald-700 transition-colors disabled:opacity-50"
+            className="w-full bg-(--app-accent) text-white py-2 rounded-lg font-medium hover:bg-(--app-accent-hover) transition-colors disabled:opacity-50"
           >
             {loading ? 'Adding...' : 'Add Transaction'}
           </button>

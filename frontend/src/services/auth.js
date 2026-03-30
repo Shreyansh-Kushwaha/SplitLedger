@@ -1,7 +1,7 @@
 export const authService = {
   getToken: () => localStorage.getItem('splitledger_token'),
   getUser: () => JSON.parse(localStorage.getItem('splitledger_user') || 'null'),
-  getDarkMode: () => JSON.parse(localStorage.getItem('splitledger_darkMode') || 'false'),
+  getDarkMode: () => JSON.parse(localStorage.getItem('splitledger_darkMode') ?? 'true'),
 
   setToken: (token) => localStorage.setItem('splitledger_token', token),
   setUser: (user) => localStorage.setItem('splitledger_user', JSON.stringify(user)),

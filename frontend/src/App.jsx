@@ -26,7 +26,7 @@ function App() {
   const [isLogin, setIsLogin] = useState(true);
   const [selectedUserId, setSelectedUserId] = useState('');
   const [selectedUserName, setSelectedUserName] = useState('');
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(true);
   const [settlementPerson, setSettlementPerson] = useState(null);
 
   // Initialize dark mode on mount
@@ -167,44 +167,46 @@ function App() {
 
   if (!loggedIn) {
     return (
-      <div className="min-h-screen py-6 px-4 sm:px-6 lg:px-8 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">
-        <div className="max-w-md mx-auto">
-          <div className="flex justify-between items-center mb-4">
-            <h1 className="text-3xl font-bold">SplitLedger</h1>
-            <button
-              className="px-3 py-1 rounded bg-indigo-600 text-white hover:bg-indigo-700 transition-colors"
-              onClick={handleToggleDarkMode}
-            >
-              {darkMode ? 'Light' : 'Dark'}
-            </button>
+      <div className="min-h-screen bg-(--app-bg) text-(--app-text) transition-colors duration-200">
+        <div className="min-h-screen flex flex-col items-center justify-center py-10 px-4">
+          <div className="w-full max-w-md">
+            <div className="flex justify-between items-center mb-8">
+              <div>
+                <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">SplitLedger</h1>
+                <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Track money lent &amp; borrowed</p>
+              </div>
+              <button
+                className="p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors shadow-sm"
+                onClick={handleToggleDarkMode}
+                title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+              >
+                {darkMode ? '☀️' : '🌙'}
+              </button>
+            </div>
+
+            {isLogin ? (
+              <LoginForm
+                onLogin={handleAuthSubmit}
+                onSwitchToRegister={() => setIsLogin(false)}
+                loading={authLoading}
+                error={authError}
+              />
+            ) : (
+              <RegisterForm
+                onRegister={handleAuthSubmit}
+                onSwitchToLogin={() => setIsLogin(true)}
+                loading={authLoading}
+                error={authError}
+              />
+            )}
           </div>
-
-          {isLogin ? (
-            <LoginForm
-              onLogin={handleAuthSubmit}
-              onSwitchToRegister={() => setIsLogin(false)}
-              loading={authLoading}
-              error={authError}
-            />
-          ) : (
-            <RegisterForm
-              onRegister={handleAuthSubmit}
-              onSwitchToLogin={() => setIsLogin(true)}
-              loading={authLoading}
-              error={authError}
-            />
-          )}
-
-          <p className="mt-4 text-xs text-slate-500 dark:text-slate-400">
-            Backend: {import.meta.env.VITE_API_URL || 'http://localhost:5000'}
-          </p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen py-4 px-2 sm:px-4 lg:px-6 bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100">
+    <div className="min-h-screen py-4 px-2 sm:px-4 lg:px-6 bg-(--app-bg) text-(--app-text) transition-colors duration-200">
       <div className="max-w-5xl mx-auto space-y-5">
         <Header
           user={user}
@@ -264,6 +266,7 @@ function App() {
         {settlementPerson && (
           <SettlementForm
             person={settlementPerson}
+            maxAmount={Math.abs(settlementPerson.net)}
             onSubmit={handleSettlementSubmit}
             onCancel={handleSettlementCancel}
             loading={reqLoading}

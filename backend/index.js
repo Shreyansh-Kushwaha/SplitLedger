@@ -11,9 +11,9 @@ const settlementRoutes = require('./routes/settlementRequests');
 const app = express();
 
 app.use(cors({
-  origin: 'https://split-ledger-xi.vercel.app', // Your exact React frontend URL
-  credentials: true, // This allows your frontend to send auth tokens/cookies
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'] // Explicitly allow these methods
+  origin: true,
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
 }));
 
 app.use(express.json());
@@ -27,7 +27,7 @@ app.use('/api/settlement-requests', settlementRoutes);
 
 app.get('/api/health', (req, res) => res.send({ status: 'ok', service: 'SplitLedger API' }));
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`SplitLedger backend running on port ${PORT}`);
 });

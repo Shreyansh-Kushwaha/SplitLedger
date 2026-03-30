@@ -1,26 +1,30 @@
 import PropTypes from 'prop-types';
 
 const Header = ({ user, onLogout, darkMode, onToggleDarkMode }) => {
-  const userLabel = user?.name ? `${user.name} (${user.email})` : 'Anonymous';
+  const userName = user?.name || 'Anonymous';
+  const userEmail = user?.email || '';
 
   return (
-    <header className="flex flex-wrap justify-between items-center gap-3 bg-white dark:bg-slate-800 rounded-xl p-4 shadow-md dark:shadow-lg border border-slate-200 dark:border-slate-700">
+    <header className="flex flex-wrap justify-between items-center gap-3 bg-(--app-surface) rounded-xl px-5 py-4 shadow-sm border border-(--app-border)">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">SplitLedger</h1>
-        <p className="text-xs text-slate-500 dark:text-slate-400">{userLabel}</p>
+        <h1 className="text-xl font-bold tracking-tight text-(--app-text)">SplitLedger</h1>
+        <p className="text-xs text-(--app-text-3) mt-0.5">
+          {userName}{userEmail ? ` · ${userEmail}` : ''}
+        </p>
       </div>
-      <div className="flex gap-2">
-        <button
-          onClick={onLogout}
-          className="px-3 py-1 rounded bg-rose-500 text-white hover:bg-rose-600 transition-colors"
-        >
-          Logout
-        </button>
+      <div className="flex items-center gap-2">
         <button
           onClick={onToggleDarkMode}
-          className="px-3 py-1 rounded bg-indigo-600 text-white hover:bg-indigo-700 transition-colors"
+          className="p-2 rounded-lg bg-(--app-surface-2) border border-(--app-border-2) text-(--app-text-2) hover:bg-(--app-surface-3) transition-colors"
+          title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
         >
-          {darkMode ? 'Light' : 'Dark'}
+          {darkMode ? '☀️' : '🌙'}
+        </button>
+        <button
+          onClick={onLogout}
+          className="px-4 py-2 rounded-lg bg-rose-500 text-white text-sm font-medium hover:bg-rose-600 transition-colors"
+        >
+          Logout
         </button>
       </div>
     </header>
