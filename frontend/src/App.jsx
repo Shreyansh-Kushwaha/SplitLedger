@@ -150,6 +150,7 @@ function App() {
       description: tx.description || '',
       date: new Date(tx.date).toLocaleDateString(),
       status: tx.status,
+      settledAt: tx.settledAt ? new Date(tx.settledAt).toLocaleDateString() : null,
       mine,
       settleDisabled: tx.status === 'settled',
       fromUserId: tx.fromUser?._id,

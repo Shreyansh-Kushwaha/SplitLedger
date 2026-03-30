@@ -103,6 +103,7 @@ router.patch('/:id/settle', auth, async (req, res) => {
     }
 
     tx.status = 'settled';
+    tx.settledAt = new Date();
     await tx.save();
 
     res.json(tx);

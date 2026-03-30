@@ -19,6 +19,7 @@ const UserTransactionHistoryTable = ({ selectedUserName, transactions }) => {
                 <th className="px-3 py-2 border border-(--app-border)">Date</th>
                 <th className="px-3 py-2 border border-(--app-border)">Amount</th>
                 <th className="px-3 py-2 border border-(--app-border)">Status</th>
+                <th className="px-3 py-2 border border-(--app-border)">Settled Date</th>
               </tr>
             </thead>
             <tbody>
@@ -33,6 +34,7 @@ const UserTransactionHistoryTable = ({ selectedUserName, transactions }) => {
                       {value >= 0 ? `+₹${value}` : `-₹${Math.abs(value)}`}
                     </td>
                     <td className="px-3 py-2 border border-(--app-border)">{tx.status}</td>
+                    <td className="px-3 py-2 border border-(--app-border)">{tx.settledAt || '—'}</td>
                   </tr>
                 );
               })}
@@ -54,6 +56,7 @@ UserTransactionHistoryTable.propTypes = {
     amount: PropTypes.number.isRequired,
     status: PropTypes.string.isRequired,
     description: PropTypes.string,
+    settledAt: PropTypes.string,
   })).isRequired,
 };
 

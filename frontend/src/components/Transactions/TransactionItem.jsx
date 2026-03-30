@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 
 const TransactionItem = ({ transaction, onSettle }) => {
-  const { id, role, otherName, amount, description, date, status, settleDisabled } = transaction;
+  const { id, role, otherName, amount, description, date, status, settledAt, settleDisabled } = transaction;
 
   return (
     <article className="border border-(--app-border-2) rounded-xl p-3 bg-(--app-surface-2)">
@@ -19,7 +19,8 @@ const TransactionItem = ({ transaction, onSettle }) => {
         </span>
       </div>
       <p className="text-xs text-(--app-text-2) mt-1">{description || 'No description'}</p>
-      <p className="text-xs text-(--app-text-3) mt-1">{date}</p>
+      <p className="text-xs text-(--app-text-3) mt-1">Transaction: {date}</p>
+      {settledAt && <p className="text-xs text-green-600 dark:text-green-400 mt-1">Settled: {settledAt}</p>}
       <div className="mt-2">
         <button
           onClick={() => onSettle(id)}
@@ -46,6 +47,7 @@ TransactionItem.propTypes = {
     description: PropTypes.string,
     date: PropTypes.string.isRequired,
     status: PropTypes.string.isRequired,
+    settledAt: PropTypes.string,
     settleDisabled: PropTypes.bool,
   }).isRequired,
   onSettle: PropTypes.func.isRequired,

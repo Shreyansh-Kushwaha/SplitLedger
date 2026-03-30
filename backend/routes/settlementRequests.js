@@ -92,6 +92,7 @@ router.patch('/:id/confirm', auth, async (req, res) => {
       if (remainingAmount >= tx.amount) {
         // Fully settle this transaction
         tx.status = 'settled';
+        tx.settledAt = new Date();
         await tx.save();
         settledIds.push(tx._id);
         settledAmount += tx.amount;
@@ -111,6 +112,7 @@ router.patch('/:id/confirm', auth, async (req, res) => {
           description: tx.description ? `${tx.description} (partial settled)` : 'Partial settlement',
           date: tx.date,
           status: 'settled',
+          settledAt: new Date(),
         });
         await settledTx.save();
 
