@@ -28,19 +28,19 @@ const UserSearch = ({ onUserSelect, selectedUserId }) => {
     <div className="bg-(--app-surface) rounded-xl p-4 shadow-sm border border-(--app-border)">
       <h2 className="font-semibold text-lg mb-3 text-(--app-text)">Search Users</h2>
 
-      <form className="flex gap-2" onSubmit={handleSearch}>
+      <form className="flex gap-2 min-w-0" onSubmit={handleSearch}>
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search by name or email"
-          className="flex-1 border border-(--app-border-2) rounded-lg px-3 py-2 bg-(--app-surface-2) text-(--app-text) placeholder:text-(--app-text-3) focus:outline-none focus:ring-2 focus:ring-(--app-ring)"
+          className="flex-1 min-w-0 border border-(--app-border-2) rounded-lg px-3 py-2 bg-(--app-surface-2) text-(--app-text) placeholder:text-(--app-text-3) focus:outline-none focus:ring-2 focus:ring-(--app-ring)"
         />
         <button
           type="submit"
           disabled={loading}
-          className="px-4 bg-(--app-accent) text-white rounded-lg hover:bg-(--app-accent-hover) transition-colors disabled:opacity-50"
+          className="shrink-0 px-4 py-2 bg-(--app-accent) text-white rounded-lg hover:bg-(--app-accent-hover) transition-colors disabled:opacity-50 whitespace-nowrap"
         >
-          {loading ? '...' : 'Search'}
+          {loading ? '…' : 'Search'}
         </button>
       </form>
 
