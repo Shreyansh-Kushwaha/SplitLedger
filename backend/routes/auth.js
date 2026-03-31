@@ -1,9 +1,16 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { OAuth2Client } = require('google-auth-library');
 const User = require('../models/User');
 
 const router = express.Router();
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+// GET /api/auth/google-client-id — expose client ID to frontend
+router.get('/google-client-id', (req, res) => {
+  res.json({ clientId: process.env.GOOGLE_CLIENT_ID });
+});
 
 // POST /api/auth/register
 router.post('/register', async (req, res) => {
