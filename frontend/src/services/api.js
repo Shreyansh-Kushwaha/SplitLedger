@@ -20,6 +20,8 @@ export const apiFetch = async (path, method = 'GET', body, token) => {
 export const authAPI = {
   register: (userData) => apiFetch('/api/auth/register', 'POST', userData),
   login: (credentials) => apiFetch('/api/auth/login', 'POST', credentials),
+  googleLogin: (credential) => apiFetch('/api/auth/google', 'POST', { credential }),
+  getGoogleClientId: () => apiFetch('/api/auth/google-client-id'),
 };
 
 export const userAPI = {

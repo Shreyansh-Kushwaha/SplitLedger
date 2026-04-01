@@ -44,6 +44,24 @@ export const useAuth = () => {
     }
   };
 
+  const googleLogin = async (credential) => {
+    setLoading(true);
+    setError('');
+    try {
+      const data = await authAPI.googleLogin(credential);
+      authService.setToken(data.token);
+      authService.setUser(data.user);
+      setToken(data.token);
+      setUser(data.user);
+      return data;
+    } catch (err) {
+      setError(err.message);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const logout = () => {
     authService.clear();
     setToken(null);
@@ -59,6 +77,7 @@ export const useAuth = () => {
     error,
     login,
     register,
+    googleLogin,
     logout,
     isAuthenticated,
   };

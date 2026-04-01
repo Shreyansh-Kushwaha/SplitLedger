@@ -12,6 +12,43 @@ router.get('/google-client-id', (req, res) => {
   res.json({ clientId: process.env.GOOGLE_CLIENT_ID });
 });
 
+// POST /api/auth/google — verify Google credential and sign in / register
+router.post('/google', async (req, res) => {
+  try {
+    const { credential } = req.body;
+    if (!credential) return res.status(400).json({ message: 'Missing Google credential' });
+
+    const ticket = await googleClient.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+    const payload = ticket.getPayload();
+    const { sub: googleId, email, name } = payload;
+
+    let user = await User.findOne({ email: email.toLowerCase() });
+
+    if (user) {
+      // Link Google account if not already linked
+      if (!user.googleId) {
+        user.googleId = googleId;
+        await user.save();
+      }
+    } else {
+      // Create new user from Google account (no password)
+      user = new User({ name, email: email.toLowerCase(), googleId });
+      await user.save();
+    }
+
+    const jwtPayload = { user: { id: user.id } };
+    const token = jwt.sign(jwtPayload, process.env.JWT_SECRET, { expiresIn: '7d' });
+
+    res.json({ token, user: { id: user.id, name: user.name, email: user.email } });
+  } catch (err) {
+    console.error('Google auth error:', err.message);
+    res.status(401).json({ message: 'Google authentication failed' });
+  }
+});
+
 // POST /api/auth/register
 router.post('/register', async (req, res) => {
   try {

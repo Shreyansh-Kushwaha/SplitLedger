@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
+import { GoogleLogin } from '@react-oauth/google';
 
-const RegisterForm = ({ onRegister, onSwitchToLogin, loading, error }) => {
+const RegisterForm = ({ onRegister, onSwitchToLogin, loading, error, onGoogleLogin, googleReady }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -60,6 +61,27 @@ const RegisterForm = ({ onRegister, onSwitchToLogin, loading, error }) => {
         </button>
       </form>
 
+      {googleReady && (
+        <>
+          <div className="flex items-center gap-3 my-4">
+            <div className="flex-1 h-px bg-(--app-border-2)" />
+            <span className="text-xs text-(--app-text-3)">or</span>
+            <div className="flex-1 h-px bg-(--app-border-2)" />
+          </div>
+          <div className="flex justify-center">
+            <GoogleLogin
+              onSuccess={onGoogleLogin}
+              onError={() => {}}
+              theme="outline"
+              size="large"
+              width="360"
+              text="signup_with"
+              shape="rectangular"
+            />
+          </div>
+        </>
+      )}
+
       <p className="mt-4 text-sm text-(--app-text-3) text-center">
         Already have an account?{' '}
         <button onClick={onSwitchToLogin} className="text-(--app-accent) font-medium hover:underline">
@@ -75,6 +97,8 @@ RegisterForm.propTypes = {
   onSwitchToLogin: PropTypes.func.isRequired,
   loading: PropTypes.bool,
   error: PropTypes.string,
+  onGoogleLogin: PropTypes.func,
+  googleReady: PropTypes.bool,
 };
 
 export default RegisterForm;
